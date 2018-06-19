@@ -1,0 +1,74 @@
+html {
+  font-size: 16px; }
+
+body {
+  font-size: 62.5%;
+  background-color: #0d1521;
+  color: #989898;
+  font-family: tahoma;
+  color: #989898; }
+
+#todo-table {
+  box-sizing: border-box;
+  width: 95%;
+  background: #090d13;
+  margin: 0 auto;
+  padding: 3em;
+  border: 1px solid #fff; }
+  #todo-table #showData {
+    display: none; }
+  #todo-table form {
+    width: 100%; }
+    #todo-table form input[type="text"] {
+      background: #181c22;
+      font-size: 2em;
+      width: 65%;
+      padding: .8em;
+      margin: 0;
+      border: 0; }
+    #todo-table form button[type="submit"] {
+      box-sizing: border-box;
+      background: #181c22;
+      color: #989898;
+      float: right;
+      width: 26%;
+      font-size: 2em;
+      border: 0;
+      padding: .8em;
+      cursor: pointer; }
+      #todo-table form button[type="submit"]:hover {
+        box-shadow: 0px 0px 0px 1px rgba(255, 255, 255, 0.5); }
+    #todo-table form:after {
+      display: block;
+      content: "";
+      clear: both; }
+  #todo-table #todo-list {
+    list-style: none;
+    padding: 0;
+    margin: 0; }
+    #todo-table #todo-list .item-block {
+      width: 100%;
+      padding: 1.3em;
+      box-sizing: border-box;
+      font-family: arial;
+      font-size: 1.3em;
+      cursor: pointer;
+      letter-spacing: 1px; }
+      #todo-table #todo-list .item-block:hover {
+        background: #0d1521; }
+      #todo-table #todo-list .item-block p.item-name {
+        display: inline-block;
+        padding: 0;
+        margin: 0; }
+      #todo-table #todo-list .item-block .item-description {
+        display: none; }
+        #todo-table #todo-list .item-block .item-description.visible {
+          display: block; }
+        #todo-table #todo-list .item-block .item-description .edit {
+          display: inline-block; }
+          #todo-table #todo-list .item-block .item-description .edit:hover {
+            color: #ccc; }
+        #todo-table #todo-list .item-block .item-description .delete {
+          float: right; }
+          #todo-table #todo-list .item-block .item-description .delete:hover {
+            color: #ccc; }

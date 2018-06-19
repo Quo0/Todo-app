@@ -1,0 +1,93 @@
+// @import "parts/part.scss";
+html{
+	font-size: 16px;
+}
+body{
+	font-size: 62.5%;
+	background-color: #0d1521;;
+	color: #989898;
+	font-family: tahoma;
+    color: #989898;
+}
+#todo-table{
+	box-sizing: border-box;
+	width: 95%;
+	background: #090d13;
+	margin: 0 auto;
+	padding: 3em;
+	border: 1px solid #fff;
+	#showData{
+		display:none;
+	}
+	form{
+		width: 100%;
+		input[type="text"]{			
+  	  		background:#181c22;
+			font-size: 2em;
+			width: 65%;
+			padding: .8em;
+			margin: 0;			
+			border: 0;
+		};
+		button[type="submit"]{
+			box-sizing: border-box;		
+    		background:#181c22;
+    		color: #989898;
+			float: right;
+			width: 26%;
+			font-size: 2em;
+			border: 0;
+			padding: .8em;
+			cursor: pointer;
+			&:hover{
+				box-shadow: 0px 0px 0px 1px rgba(#FFF, 0.5%);
+			}
+		}
+		&:after{
+			display: block;
+			content:"";
+			clear: both;
+		}
+	}
+	#todo-list{
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		.item-block{
+			width: 100%;
+			padding: 1.3em;
+			box-sizing: border-box;
+			font-family: arial;
+			font-size: 1.3em;
+			cursor: pointer;
+    		letter-spacing: 1px;
+    		&:hover{
+    			// text-decoration: line-through;
+    			background: #0d1521;
+    		}
+    		p.item-name{
+    			display: inline-block;
+    			padding: 0;
+    			margin: 0;
+    		}
+    		.item-description{
+    			display: none;
+    			&.visible{
+    				display: block;
+    			}
+				.edit{
+					display:inline-block;
+					&:hover{
+						color: #ccc;
+					}
+				}
+				.delete{
+					float: right;
+					&:hover{
+						color: #ccc;
+					}
+				}
+    		}
+		}
+	}
+}
