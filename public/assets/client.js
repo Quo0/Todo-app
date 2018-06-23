@@ -17,9 +17,14 @@ $('document').ready(()=>{
       url:"/get_products",
       contentType: "application/JSON",
       success: function(serverResponse){
+        let serverArray = serverResponse.dataArr;
+        serverArray.sort((a,b)=>{
+          if(a.item > b.item) return 1;
+          if(a.item < b.item) return -1;          
+        })
         const ul = $('#todo-list');
         ul.html('');
-        serverResponse.dataArr.forEach((dataObj)=>{
+        serverArray.forEach((dataObj)=>{
           ul.append(`<li class="item-block">
                         <p class="item-name">${dataObj.item}</p>
                         <div class="item-description">
@@ -51,7 +56,6 @@ $('document').ready(()=>{
         }
       }),
       success: function(serverData){
-        console.log(serverData);
         $('#showData').click();
       }
     })
@@ -86,7 +90,7 @@ $('document').ready(()=>{
     if(event.target.className == "delete"){
       const itemBlock = event.target.parentNode.parentNode;
       const todoNameId = itemBlock.querySelector('.item-name').innerHTML.replace(/ /,"-");
-            
+
       $.ajax({
         type: "DELETE",
         url: `/delete_product/${todoNameId}`,
