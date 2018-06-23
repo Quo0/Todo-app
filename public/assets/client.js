@@ -51,6 +51,7 @@ $('document').ready(()=>{
         }
       }),
       success: function(serverData){
+        console.log(serverData);
         $('#showData').click();
       }
     })
@@ -65,7 +66,7 @@ $('document').ready(()=>{
       const newDescr = prompt("Enter item description", "");
 
       const clientData = {
-        item: newName.replace(/ /,"-").toLowerCase(),
+        item: newName,
         description: newDescr
       };
 
@@ -84,8 +85,8 @@ $('document').ready(()=>{
    $('#todo-list').on('click',(event)=>{
     if(event.target.className == "delete"){
       const itemBlock = event.target.parentNode.parentNode;
-      const todoNameId = itemBlock.querySelector('.item-name').innerHTML.replace(/ /,"-").toLowerCase();
-      
+      const todoNameId = itemBlock.querySelector('.item-name').innerHTML.replace(/ /,"-");
+            
       $.ajax({
         type: "DELETE",
         url: `/delete_product/${todoNameId}`,
