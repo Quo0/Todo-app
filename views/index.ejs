@@ -9,24 +9,39 @@
   	<link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body>
-	<div id="todo-table">
-		<button id="showData">HIDDEN CONTROLLER</button>
-		<form>
-			<input id="newItem" type="text" name="item" placeholder="Add new item..." required>
-			<button id="addItem" type="submit">Add item</button>
-		</form>
-		<ul id="todo-list">
-			<!-- <li class="item-block">
-				<p class="item-name">ITEM</p>
-				<div class="item-description">
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque perferendis maxime reprehenderit voluptatibus accusamus, dicta quasi quia odio nam incidunt id tempore minus, non exercitationem hic voluptate natus totam ea voluptatem praesentium fugit laborum, soluta numquam! Error debitis iusto, soluta possimus aspernatur necessitatibus inventore ipsa. Commodi aliquam quam praesentium vel!
-					</p>
-					<span class="edit">Edit</li>
-					<span class="delete">Remove</span> 
-				</div>
-			</li> -->
-		</ul>
-	</div>	
+	<div class="wrapper">
+		<div id="todo-table">
+			<button id="showData">HIDDEN CONTROLLER</button>
+			<form>
+				<input id="newItem" type="text" name="item" placeholder="Add new item..." required>
+				<button id="addItem" type="submit">Add item</button>
+			</form>
+			<h2>Your current tasks: </h2>
+			<ul id="todo-list">
+				<!-- <li class="item-block">
+					<p class="item-name">ITEM</p>
+					<div class="item-description">
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque perferendis maxime reprehenderit voluptatibus accusamus, dicta quasi quia odio nam incidunt id tempore minus, non exercitationem hic voluptate natus totam ea voluptatem praesentium fugit laborum, soluta numquam! Error debitis iusto, soluta possimus aspernatur necessitatibus inventore ipsa. Commodi aliquam quam praesentium vel!
+						</p>
+						<span class="done">Done!</span>
+						<span class="edit">Edit</li>
+						<span class="delete">Remove</span> 
+					</div>
+				</li> -->
+			</ul>
+			<h2>Finished tasks: </h2>
+			<ul id="done-list">
+<!-- 				<li class="item-block">
+					<p class="item-name">Todo name</p>
+					<div class="item-description">
+						<p>Here see todo descr</p>
+						<span class="date">24/04/18</span>
+						<span class="delete">Remove 4ever</span>
+					</div>
+				</li> -->
+			</ul>
+		</div>	
+	</div>		
 	<script src="/client.js"></script>
 </body>
 </html>
