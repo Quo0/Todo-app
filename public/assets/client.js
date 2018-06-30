@@ -1,3 +1,12 @@
+ function formatDate(date){
+  let day = date.getDate();
+  if(day<10){day = "0" + date.getDate()};
+  let month = date.getMonth()+1;
+  if(month<10){month = "0" + (date.getMonth()+1)};
+  const year = date.getFullYear() % 2000;
+  return `${day}:${month}:${year}`
+ }
+
 $('document').ready(()=>{
   //drop-down description
   $('#todo-table').on('click',(event)=>{
@@ -58,7 +67,7 @@ $('document').ready(()=>{
                               <p class="item-name">${dataItem.item}</p>
                               <div class="item-description">
                                 <p>${dataItem.description}</p>
-                                <span class="date">24/04/18</span>
+                                <span class="date">${dataItem.date}</span>
                                 <span class="delete">Remove 4ever</span>
                               </div>
                             </li>
@@ -91,6 +100,7 @@ $('document').ready(()=>{
       }
     })
   })
+
   // PUT update todo
   $('#todo-list').on('click',(event)=>{
     if(event.target.className == "edit"){
@@ -147,6 +157,8 @@ $('document').ready(()=>{
         contentType:"application/JSON",
         success: function(itemToDelete){
           const doneItem = Object.assign({}, itemToDelete.dataArr);
+          const date = formatDate(new Date());
+          doneItem.date = date;
           $.ajax({
             type:"POST",
             url:`/new_done_item`,
