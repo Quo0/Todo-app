@@ -16,7 +16,15 @@
 				<input id="newItem" type="text" name="item" placeholder="Add new item..." required>
 				<button id="addItem" type="submit">Add item</button>
 			</form>
-			<h2>Your current tasks: </h2>
+			<div class="todo-head">
+				<h2>Your current tasks: </h2>
+				<p>Sort by
+					<form id="todo-sort-form">
+						<input type="radio" id="sort-date" name="todo-sort" checked><label for="sort-date">date</label> / 
+						<input type="radio" id="sort-name" name="todo-sort"><label for="sort-name">name</label>
+					</form>
+				</p>				
+			</div>
 			<ul id="todo-list">
 				<!-- <li class="item-block">
 					<p class="item-name">ITEM</p>

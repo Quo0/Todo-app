@@ -51,6 +51,33 @@ body{
 			}
 		}
 	}
+	.todo-head{
+		font-size: 1.2em;
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		h2{
+			flex-grow: 1;
+		}
+		p{
+			padding-right: .5em
+		}
+		input{
+			display: none;
+			&:checked + label{
+				color: #faac;
+			}
+		}
+		label{
+			color: #333;
+			cursor: pointer;
+		}
+		form{
+			display: inline;
+			flex-basis: auto;
+			width: auto;
+		}
+	}
 	#todo-list,#done-list{
 		list-style: none;
 		padding: 0;

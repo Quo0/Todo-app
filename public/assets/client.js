@@ -7,6 +7,20 @@
   return `${day}:${month}:${year}`
  }
 
+let sortType;
+let sortTodoItems = function (a,b){
+  let property;
+  if(sortType == "name"){
+    property = "item"
+  }
+  if(sortType == "date"){
+    property = "date"
+  };
+  
+  if(a[property] > b[property]) return 1;
+  if(a[property] < b[property]) return -1;     
+}
+
 $('document').ready(()=>{
   //drop-down description
   $('#todo-table').on('click',(event)=>{
@@ -20,6 +34,19 @@ $('document').ready(()=>{
     }
   });
 
+  //custom sort
+  const allRadio = $('#todo-sort-form input');
+  Array.from(allRadio).forEach((radioBtn)=>{
+    radioBtn.addEventListener('change', (e)=>{
+      if(e.target.id == "sort-name"){
+        sortType = "name";
+      } else { sortType = "date"};
+      $('#showData').click();
+    })
+  });
+  
+  // AJAX
+
   // GET all todo's
   $('#showData').on("click", ()=>{
     //upload Todo data
@@ -29,10 +56,7 @@ $('document').ready(()=>{
       contentType: "application/JSON",
       success: function(serverResponse){
         let serverArray = serverResponse.dataArr;
-        serverArray.sort((a,b)=>{
-          if(a.item > b.item) return 1;
-          if(a.item < b.item) return -1;          
-        })
+        serverArray.sort(sortTodoItems);
         const ul = $('#todo-list');
         ul.html('');
         serverArray.forEach((dataObj)=>{
@@ -92,7 +116,8 @@ $('document').ready(()=>{
       data: JSON.stringify({
         clientData:{
           item:newTodo,
-          description: newTodoDescr
+          description: newTodoDescr,
+          date: +new Date()
         }
       }),
       success: function(serverData){

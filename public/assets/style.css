@@ -44,6 +44,26 @@ body {
       cursor: pointer; }
       #todo-table form button[type="submit"]:hover {
         box-shadow: 0px 0px 0px 1px rgba(255, 255, 255, 0.5); }
+  #todo-table .todo-head {
+    font-size: 1.2em;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline; }
+    #todo-table .todo-head h2 {
+      flex-grow: 1; }
+    #todo-table .todo-head p {
+      padding-right: .5em; }
+    #todo-table .todo-head input {
+      display: none; }
+      #todo-table .todo-head input:checked + label {
+        color: #faac; }
+    #todo-table .todo-head label {
+      color: #333;
+      cursor: pointer; }
+    #todo-table .todo-head form {
+      display: inline;
+      flex-basis: auto;
+      width: auto; }
   #todo-table #todo-list, #todo-table #done-list {
     list-style: none;
     padding: 0;
