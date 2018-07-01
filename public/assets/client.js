@@ -137,6 +137,7 @@ $('document').ready(()=>{
         $('#showData').click();
       }
     })
+    newItemInput.val("");
   })
 
   // PUT update todo
@@ -199,13 +200,13 @@ $('document').ready(()=>{
       const confirmed = confirm("Are you sure you want to delete this task?");
       if(confirmed){
         const itemBlock = event.target.parentNode.parentNode;
-        const todoNameId = itemBlock.querySelector('.item-name').innerHTML.replace(/ /,"-");
+        const itemId = itemBlock.dataset.id
 
         $.ajax({
           type: "DELETE",
-          url: `/delete_todo_item/${todoNameId}`,
+          url: `/delete_todo_item/${itemId}`,
           contentType:"application/JSON",
-          data: JSON.stringify({id:todoNameId}),
+          // data: JSON.stringify({id:itemId}),
           success: function(){
             $('#showData').click();
           }
@@ -220,14 +221,14 @@ $('document').ready(()=>{
       const confirmed = confirm("Mark this task as done?");
       if(confirmed){
         const itemBlock = event.target.parentNode.parentNode;
-        const todoNameId = itemBlock.querySelector('.item-name').innerHTML.replace(/ /g,"-");
+        const todoId = itemBlock.dataset.id;
 
         $.ajax({
           type:"GET",
-          url:`/find_to_delete/${todoNameId}`,
+          url:`/find_to_delete/${todoId}`,
           contentType:"application/JSON",
           success: function(itemToDelete){
-            const doneItem = Object.assign({}, itemToDelete.dataArr);
+            const doneItem = Object.assign({}, itemToDelete.data);
             const date = formatDate(new Date());
             doneItem.date = date;
             $.ajax({
@@ -252,11 +253,11 @@ $('document').ready(()=>{
       const confirmed = confirm("Are you sure you want to delete this task?");
       if(confirmed){
         const itemBlock = event.target.parentNode.parentNode;
-        const doneItemName = itemBlock.querySelector(".item-name").innerHTML.replace(/ /g,"-");
+        const doneItemId = itemBlock.dataset.id;
 
         $.ajax({
           type:"DELETE",
-          url:`/delete_done_item/${doneItemName}`,
+          url:`/delete_done_item/${doneItemId}`,
           contentType:"application/JSON",
           success: function(){
             $('#showData').click();

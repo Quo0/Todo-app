@@ -46,19 +46,19 @@ module.exports = function(app){
 		});
 	});
 	app.delete('/delete_todo_item/:id', (req,resp)=>{
-		Todo.find({item: req.params.id.replace(/\-/g, " ")}).remove((err,data)=>{
+		Todo.findById(req.params.id).remove((err,data)=>{
 			if(err)throw err;
 			resp.send();
 		});
 	});
 	app.get('/find_to_delete/:id',(req,resp)=>{
-		Todo.find({item: req.params.id.replace(/-/g," ")}, (err,data)=>{
+		Todo.findById(req.params.id, (err,data)=>{
 			if(err){throw err};
-			resp.send({dataArr: data[0]});
+			resp.send({data: data});
 		});
 	});
 	app.post('/new_done_item',(req,resp)=>{
-		Todo.find({item: req.body.item}).remove((err)=>{
+		Todo.findById(req.body._id).remove((err)=>{
 			if(err){throw err};
 		})
 		Done(req.body).save((err,data)=>{
@@ -67,7 +67,7 @@ module.exports = function(app){
 		});
 	});
 	app.delete('/delete_done_item/:id',(req,resp)=>{
-		Done.find({item: req.params.id.replace(/-/g," ")}).remove((err)=>{
+		Done.findById(req.params.id).remove((err)=>{
 			if(err){throw err};
 			resp.send();
 		})
