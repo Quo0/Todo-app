@@ -1,4 +1,4 @@
- function formatDate(date){
+let formatDate = function (date){
   let day = date.getDate();
   if(day<10){day = "0" + date.getDate()};
   let month = date.getMonth()+1;
@@ -7,7 +7,7 @@
   return `${day}:${month}:${year}`
  }
 
-let sortType;
+let sortType = "date"; // initial sort type;
 let sortTodoItems = function (a,b){
   let property;
   if(sortType == "name"){
@@ -60,7 +60,7 @@ $('document').ready(()=>{
         const ul = $('#todo-list');
         ul.html('');
         serverArray.forEach((dataObj)=>{
-          ul.append(`<li class="item-block">
+          ul.append(`<li class="item-block" data-id="${dataObj._id}">
                         <p class="item-name">${dataObj.item}</p>
                         <div class="item-description">
                           <p>${dataObj.description}</p>
@@ -81,13 +81,13 @@ $('document').ready(()=>{
       success: function(serverData){
         let serverArray = serverData.dataArr;
         serverArray.sort((a,b)=>{
-          if(a.item > b.item){return 1};
-          if(a.item < b.item){return -1};
+          if(a.date > b.date){return 1};
+          if(a.date < b.date){return -1};
         });
         const doneList = $("#done-list");
         doneList.html("");
         serverArray.forEach((dataItem)=>{
-          doneList.append(`<li class="item-block">
+          doneList.append(`<li class="item-block data-id="${dataItem._id}">
                               <p class="item-name">${dataItem.item}</p>
                               <div class="item-description">
                                 <p>${dataItem.description}</p>
@@ -134,6 +134,7 @@ $('document').ready(()=>{
 
       const newName = prompt("Enter new todo name",todoName);
       const newDescr = prompt("Enter item description", "");
+      let ID = itemBlock.dataset.id;
 
       const clientData = {
         item: newName,
@@ -142,7 +143,7 @@ $('document').ready(()=>{
 
       $.ajax({
         type: "PUT",
-        url: `/edit_todo_item/${todoName.replace(/ /,"-")}`,
+        url: `/edit_todo_item/${ID}`,
         contentType:"application/JSON",
         data: JSON.stringify(clientData),
         success: function(){

@@ -29,13 +29,20 @@ module.exports = function(app){
 		});
 	});
 	app.put('/edit_todo_item/:id',(req,resp)=>{
-		Todo.find({item: req.params.id.replace(/\-/g, " ")}).remove((err,data)=>{
-			if(err)throw err;
-			
-			const replacedItem = Todo(req.body).save((err,data)=>{
-				if(err){throw err};
-				resp.send();
+		const id = req.params.id
+		Todo.findById(id,(err,data)=>{
+			const date = data.date;
+
+			Todo.findById(req.params.id).remove((err,data)=>{
+				if(err)throw err;
+				const newItem = Todo(req.body);
+				newItem.date = date;
+				newItem.save((err,data)=>{
+					if(err){throw err};
+					resp.send();
+				});
 			});
+
 		});
 	});
 	app.delete('/delete_todo_item/:id', (req,resp)=>{
