@@ -1,3 +1,7 @@
+const showDataBtn = document.querySelector("#showData");
+const todoList = document.querySelector('#todo-list');
+const doneList = document.querySelector("#done-list");
+
 let formatDate = function (date){
   let day = date.getDate();
   if(day<10){day = "0" + date.getDate()};
@@ -21,9 +25,9 @@ let sortTodoItems = function (a,b){
   if(a[property] < b[property]) return -1;     
 }
 
-$('document').ready(()=>{
+document.addEventListener('DOMContentLoaded', ()=>{
   //drop-down description
-  $('#todo-table').on('click',(event)=>{
+  document.querySelector("#todo-table").addEventListener("click",(event)=>{
     if(event.target.className == "item-block"){
       const descrDiv = event.target.querySelector('.item-description');
       descrDiv.classList.toggle('visible');
@@ -35,79 +39,101 @@ $('document').ready(()=>{
   });
 
   //custom sort
-  const allRadio = $('#todo-sort-form input');
-  Array.from(allRadio).forEach((radioBtn)=>{
+  const allRadio = document.forms["todo-sort-form"].querySelectorAll('input');
+  allRadio.forEach((radioBtn)=>{
     radioBtn.addEventListener('change', (e)=>{
       if(e.target.id == "sort-name"){
         sortType = "name";
       } else { sortType = "date"};
-      $('#showData').click();
+      showDataBtn.click(); //reload data on a page
     })
   });
   
-  // AJAX
+  // AJAX calls
 
   // GET all todo's
-  $('#showData').on("click", ()=>{
-    //upload Todo data
-    $.ajax({
-      type:"GET",
-      url:"/upload_todo_list",
-      contentType: "application/JSON",
-      success: function(serverResponse){
-        let serverArray = serverResponse.dataArr;
-        serverArray.sort(sortTodoItems);
-
-        const todoList = $('#todo-list');
-        todoList.html('');
-        serverArray.forEach((dataObj)=>{
-          todoList.append(`<li class="item-block" data-id="${dataObj._id}">
-                        <p class="item-name">${dataObj.item}</p>
-                        <div class="item-description">
-                          <p>${dataObj.description}</p>
-                          <span class="done">Done!</span>
-                          <span class="edit">Edit</span>
-                          <span class="delete">Remove</span>
-                        </div>
-                    </li>
-            `);
-        });
+  showDataBtn.addEventListener("click", ()=>{
+    (uploadTodoData =()=>{
+      const ROUT = '/upload_todo_list';
+      const headers = new Headers({"Content-Type":"application/JSON"});
+      const options = {
+        method: "GET",
+        headers: headers,
       }
-    });
+
+      const req = new Request( ROUT, options);
+
+      fetch(req)
+        .then(serverResponse=>{
+          return serverResponse.json();
+        })
+        .then(serverData=>{
+          const serverArray = serverData.dataArr;
+          serverArray.sort(sortTodoItems);
+
+          todoList.innerHTML = "";
+          serverArray.forEach((dataObj)=>{
+            todoList.innerHTML += `<li class="item-block" data-id="${dataObj._id}">
+                                      <p class="item-name">${dataObj.item}</p>
+                                      <div class="item-description">
+                                        <p>${dataObj.description}</p>
+                                        <span class="done">Done!</span>
+                                        <span class="edit">Edit</span>
+                                        <span class="delete">Remove</span>
+                                      </div>
+                                  </li>`;
+          });
+        })
+        .catch(err=>{
+          console.log(err);
+        });
+    })();
+
     //upload Done data
-    $.ajax({
-      type: "GET",
-      url:"/upload_done_list",
-      contentType:"application/JSON",
-      success: function(serverData){
-        let serverArray = serverData.dataArr;
-        serverArray.sort((a,b)=>{
-          if(a.date > b.date){return 1};
-          if(a.date < b.date){return -1};
-        });
-
-        const doneList = $("#done-list");
-        doneList.html("");
-        serverArray.forEach((dataItem)=>{
-          doneList.append(`<li class="item-block" data-id="${dataItem._id}">
-                              <p class="item-name">${dataItem.item}</p>
-                              <div class="item-description">
-                                <p>${dataItem.description}</p>
-                                <span class="date">${dataItem.date}</span>
-                                <span class="delete">Remove 4ever</span>
-                              </div>
-                            </li>
-            `);
-        });
+    (uploadDoneData=()=>{
+      const ROUT = "/upload_done_list";
+      const headers = new Headers({"Content-Type":"application/JSON"});
+      const options = {
+        method: "GET",
+        headers: headers,
       }
-    });
-  });
+
+      const req = new Request(ROUT, options)
+
+      fetch(req)
+        .then(serverResponse=>{
+          return serverResponse.json()
+        })
+        .then(serverData=>{
+          const serverArray = serverData.dataArr;
+          serverArray.sort((a,b)=>{
+            if(a.date > b.date){return 1};
+            if(a.date < b.date){return -1};
+          });
+          
+          doneList.innerHTML = "";
+          serverArray.forEach((dataItem)=>{
+            doneList.innerHTML += `<li class="item-block" data-id="${dataItem._id}">
+                                    <p class="item-name">${dataItem.item}</p>
+                                    <div class="item-description">
+                                      <p>${dataItem.description}</p>
+                                      <span class="date">${dataItem.date}</span>
+                                      <span class="delete">Remove 4ever</span>
+                                    </div>
+                                  </li>`;
+          });
+        })
+        .catch(err=>{
+          console.log(err);
+        });
+    })();
+  }); // end of GET all todo's
 
   // POST new todo
-  $('form').on('submit',(event)=>{
+  document.forms["newItemForm"].addEventListener('submit',(event)=>{
     event.preventDefault();
-    const newItemInput = $('#newItem');
-    const newTodo = newItemInput.val();
+    const newItemInput = document.forms["newItemForm"].querySelector('#newItem');
+    const newTodo = newItemInput.value;
     if(newTodo == false){
       alert("Please, enter the name!")
       newItemInput.focus();
@@ -122,26 +148,35 @@ $('document').ready(()=>{
       };
     })();
 
-    $.ajax({
-      type: "POST",
-      url: "/new_todo_item",
-      contentType: "application/JSON",
-      data: JSON.stringify({
+    const ROUT = "/new_todo_item";
+    const headers = new Headers({"Content-Type":"application/JSON"});
+    const options = {
+      method: "POST",
+      headers: headers,
+      body: JSON.stringify({
         clientData:{
           item:newTodo,
           description: newTodoDescr,
           date: +new Date()
         }
       }),
-      success: function(serverData){
-        $('#showData').click();
-      }
-    })
-    newItemInput.val("");
-  })
+    }
+
+    const req = new Request(ROUT, options);
+
+    fetch(req)
+      .then(serverResponse=>{
+        showDataBtn.click(); //reload data on a page
+        return serverResponse.json()
+      })
+      .catch(err=>{
+        console.log(err);
+      });
+    newItemInput.value = "";
+  }); // end of POST new todo
 
   // PUT update todo
-  $('#todo-list').on('click',(event)=>{
+  todoList.addEventListener('click',(event)=>{
     if(event.target.className == "edit"){
       const itemBlock = event.target.parentNode.parentNode;
       const todoName = itemBlock.querySelector('.item-name').innerHTML
@@ -152,17 +187,17 @@ $('document').ready(()=>{
 
         const newName = prompt("Enter new todo name",todoName);
         if(newName == false){
-          reject("Please enter the new name!")
+          reject("Please enter the new name!");
           return;
         } else if(newName == null){
           reject("You didn't change anything");
           return;
         } else {
-          clientData.name = newName
+          clientData.name = newName;
         }
         const newDescr = prompt("Enter item description", prevDescr);
         if(newDescr == null || newDescr == false){
-          clientData.description = "without description"
+          clientData.description = "without description";
         } else{
           clientData.description = newDescr;
         }
@@ -177,95 +212,140 @@ $('document').ready(()=>{
             description: resolve.description
           };
 
-          $.ajax({
-            type: "PUT",
-            url: `/edit_todo_item/${ID}`,
-            contentType:"application/JSON",
-            data: JSON.stringify(clientData),
-            success: function(){
-              $('#showData').click();
-            }
-          });
+          // ajax call
+          const ROUT = `/edit_todo_item/${ID}`
+          const headers = new Headers({"Content-Type":"application/JSON"});
+          const options = {
+            method: "PUT",
+            headers: headers,
+            body: JSON.stringify(clientData)
+          }
+
+          const req = new Request(ROUT, options);
+
+          fetch(req)
+            .then(()=>{
+              showDataBtn.click(); //reload data on a page
+            })
+            .catch(err=>{
+              console.log(err);
+            });
 
         },
         (reject)=>{
           alert(reject);
-      }); 
+      }); // end of clientDataPromise
     }
   });
 
   // DELETE todo
-   $('#todo-list').on('click',(event)=>{
+   todoList.addEventListener('click',(event)=>{
     if(event.target.className == "delete"){
       const confirmed = confirm("Are you sure you want to delete this task?");
       if(confirmed){
         const itemBlock = event.target.parentNode.parentNode;
         const itemId = itemBlock.dataset.id
 
-        $.ajax({
-          type: "DELETE",
-          url: `/delete_todo_item/${itemId}`,
-          contentType:"application/JSON",
-          // data: JSON.stringify({id:itemId}),
-          success: function(){
-            $('#showData').click();
-          }
-        });
+        //ajax call
+        const ROUT = `/delete_todo_item/${itemId}`;
+        const headers = new Headers({"Content-Type":"application/JSON"});
+        const options = {
+          method: "DELETE",
+          headers: headers,
+        }
+
+        const req = new Request(ROUT, options);
+
+        fetch(req)
+          .then(()=>{
+            showDataBtn.click();
+          })
+          .catch(err=>{
+            console.log(err);
+          });
       }
     }
   });
 
   // MOVE item from Todo to Done
-   $('#todo-list').on('click',(event)=>{
+   todoList.addEventListener('click',(event)=>{
     if(event.target.className == "done"){
       const confirmed = confirm("Mark this task as done?");
       if(confirmed){
         const itemBlock = event.target.parentNode.parentNode;
         const todoId = itemBlock.dataset.id;
 
-        $.ajax({
-          type:"GET",
-          url:`/find_to_delete/${todoId}`,
-          contentType:"application/JSON",
-          success: function(itemToDelete){
-            const doneItem = Object.assign({}, itemToDelete.data);
+        //ajax call
+        const ROUT = `/find_to_delete/${todoId}`
+        const headers = new Headers({"Content-Type":"application/JSON"});
+        const options = {
+          method: "GET",
+          headers: headers,
+        }
+
+        const req = new Request(ROUT, options);
+
+        fetch(req)
+          .then(serverResponse=>{
+            return serverResponse.json();
+          })
+          .then(serverData=>{
+            const doneItem = Object.assign({}, serverData.data);
             const date = formatDate(new Date());
             doneItem.date = date;
-            $.ajax({
-              type:"POST",
-              url:`/new_done_item`,
-              contentType: 'application/JSON',
-              data: JSON.stringify(doneItem),
-              success: function(data){
-                $('#showData').click();              
-              }
-            });
 
-          }
-        });
+            //next ajax call
+            const ROUT = "/new_done_item";
+            const headers = new Headers({"Content-Type":"application/JSON"});
+            const options = {
+              method: "POST",
+              headers: headers,
+              body: JSON.stringify(doneItem),
+            }
+
+            const req = new Request(ROUT, options);
+
+            fetch(req)
+              .then(()=>{
+                showDataBtn.click()
+              })
+              .catch(err=>{
+                console.log(err);
+              })
+          })
+          .catch(err=>{
+            console.log(err);
+          })
       };      
-    }
+    };
   });
 
   // Remove Done item
-  $('#done-list').on('click',(event)=>{
+  doneList.addEventListener('click',(event)=>{
     if(event.target.className == "delete"){
       const confirmed = confirm("Are you sure you want to delete this task?");
       if(confirmed){
         const itemBlock = event.target.parentNode.parentNode;
         const doneItemId = itemBlock.dataset.id;
 
-        $.ajax({
-          type:"DELETE",
-          url:`/delete_done_item/${doneItemId}`,
-          contentType:"application/JSON",
-          success: function(){
-            $('#showData').click();
-          }
-        });
-      }
-    }
+        //ajax call
+        const ROUT = `/delete_done_item/${doneItemId}`;
+        const headers = new Headers({"Content-Type":"application/JSON"});
+        const options = {
+          method: "DELETE",
+          headers: headers,
+        }
+
+        const req = new Request(ROUT, options);
+
+        fetch(req)
+          .then(serverResponse=>{
+            showDataBtn.click()
+          })
+      };
+    };
   });
+
   //uploading current data
-  $('#showData').click();
+  showDataBtn.click();
 });

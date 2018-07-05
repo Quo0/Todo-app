@@ -63,7 +63,7 @@ module.exports = function(app){
 		})
 		Done(req.body).save((err,data)=>{
 			if(err){throw err};
-			resp.send(data);
+			resp.send();
 		});
 	});
 	app.delete('/delete_done_item/:id',(req,resp)=>{

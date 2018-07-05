@@ -3,16 +3,13 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Todo List</title>
-	<script src="http://code.jquery.com/jquery-3.3.1.js"
-	  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
-	  crossorigin="anonymous"></script>
   	<link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body>
 	<div class="wrapper">
 		<div id="todo-table">
 			<button id="showData">HIDDEN CONTROLLER</button>
-			<form>
+			<form id="newItemForm">
 				<input id="newItem" type="text" name="item" placeholder="Add new item..." >
 				<button id="addItem" type="submit">Add item</button>
 			</form>
@@ -39,7 +36,7 @@
 			</ul>
 			<h2>Finished tasks: </h2>
 			<ul id="done-list">
-<!-- 				<li class="item-block">
+			<!-- <li class="item-block">
 					<p class="item-name">Todo name</p>
 					<div class="item-description">
 						<p>Here see todo descr</p>
